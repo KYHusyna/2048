@@ -1,4 +1,4 @@
-package com.company;
+package main.game.logic;
 
 public class GameField {
     //create field array
@@ -23,8 +23,8 @@ public class GameField {
     }
 
     //setValue
-    public void setValue(int x, int y, int state) {
-        theField[x][y] = state;
+    public void setValue(int x, int y, int value) {
+        theField[x][y] = value;
     }
 
     //setColumn

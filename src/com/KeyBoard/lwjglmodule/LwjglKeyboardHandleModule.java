@@ -12,7 +12,7 @@ import com.Main.WayMove;
 import org.lwjgl.input.Keyboard;
 
 /**
- * Реализует считывание необходимых игре параметров с клавиатуры средствами LWJGL
+ * Implements reading the parameters necessary for the game from the keyboard using LWJGL
  *
  * @author DoKel
  * @version 1.0
@@ -24,7 +24,7 @@ public class LwjglKeyboardHandleModule implements KeyboardHandle {
     private WayMove lastDirectionKeyPressed;
 
     /**
-     * Считывание последних данных из стека событий
+     * Read last data from event stack
      */
     @Override
     public void update() {
@@ -55,7 +55,7 @@ public class LwjglKeyboardHandleModule implements KeyboardHandle {
     }
 
     /**
-     * Обнуление данных, полученых в при предыдущих запросах
+     * Resetting data received from previous requests
      */
     private void resetValues() {
         lastDirectionKeyPressed = WayMove.AWAIT;
@@ -63,8 +63,8 @@ public class LwjglKeyboardHandleModule implements KeyboardHandle {
     }
 
     /**
-     * @return Возвращает направление последней нажатой "стрелочки",
-     * либо AWAITING, если не было нажато ни одной
+     * @return Returns the direction of the last clicked "arrow",
+     * or AWAITING,if none has been pressed
      */
     @Override
     public WayMove lastDirectionKeyPressed() {
@@ -72,7 +72,7 @@ public class LwjglKeyboardHandleModule implements KeyboardHandle {
     }
 
     /**
-     * @return Возвращает информацию о том, был ли нажат ESCAPE за последнюю итерацию
+     * @return Returns information about whether ESCAPE was pressed during the last iteration
      */
     @Override
     public boolean wasEscPressed() {

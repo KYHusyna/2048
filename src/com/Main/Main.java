@@ -15,7 +15,8 @@ public class Main {
     private static WayMove wayMove;
     private static GraphicsModule graphicsModule;
     private static LwjglKeyboardHandleModule keyboardHandle;
-    private static GameField gameField;
+    private static GameField gameField = new GameField();
+    private static GameField gameField1;
 
     private static void initFields() {
         score = 0;
@@ -28,7 +29,7 @@ public class Main {
     }
 
     private static void createInitialCells() {
-        for(int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++) {
             generateCell();
         }
     }
@@ -38,22 +39,29 @@ public class Main {
         initFields();
         createInitialCells();
 
+        gameField.getField();
         while (!endOfGame) {
+
             input();
             logic();
 
             graphicsModule.draw(gameField);
 
         }
+        gameField.getField();
         graphicsModule.destroy();
 
     }
-
 
     public static void logic() {
         if (wayMove != WayMove.AWAIT) {
             if (shift(wayMove))
                 generateCell();
+
+            System.out.println();
+
+            if (wayMove != WayMove.AWAIT)
+                gameField.getField();
 
             wayMove = WayMove.AWAIT;
         }
@@ -63,6 +71,20 @@ public class Main {
         keyboardHandle.update();
 
         wayMove = keyboardHandle.lastDirectionKeyPressed();
+        switch (wayMove) {
+            case UP:
+                System.out.println("up");
+                break;
+            case DOWN:
+                System.out.println("down");
+                break;
+            case LEFT:
+                System.out.println("left");
+                break;
+            case RIGHT:
+                System.out.println("right");
+                break;
+        }
 
         endOfGame = endOfGame || graphicsModule.isCloseRequested() || keyboardHandle.wasEscPressed();
     }
@@ -73,26 +95,17 @@ public class Main {
         switch (wayMove) {
             case UP:
             case DOWN:
-
                 for (int i = 0; i < 4; i++) {
                     int arg[] = gameField.getColumn(i);
 
-                    if (wayMove == WayMove.UP) {
-                        int[] temp = new int[arg.length];
-                        for (int j = 0; j < arg.length; j++)
-                            temp[j] = arg[arg.length - j - 1];
-
-                        arg = temp;
+                    if (wayMove == WayMove.DOWN) {
+                        arg = gameField.reverse(arg);
                     }
 
                     ShiftRowResult result = shiftRow(arg);
 
-                    if (wayMove == WayMove.UP) {
-                        int[] temp = new int[arg.length];
-                        for (int j = 0; j < arg.length; j++)
-                            temp[j] = arg[arg.length - j - 1];
-
-                        result.shiftedRow = temp;
+                    if (wayMove == WayMove.DOWN) {
+                        result.shiftedRow = gameField.reverse(result.shiftedRow);
                     }
 
                     gameField.setColumn(i, result.shiftedRow);
@@ -108,24 +121,16 @@ public class Main {
                     int arg[] = gameField.getLine(i);
 
                     if (wayMove == WayMove.RIGHT) {
-                        int[] temp = new int[arg.length];
-                        for (int j = 0; j < arg.length; j++)
-                            temp[j] = arg[arg.length - j - 1];
-
-                        arg = temp;
+                        arg = gameField.reverse(arg);
                     }
 
                     ShiftRowResult result = shiftRow(arg);
 
                     if (wayMove == WayMove.RIGHT) {
-                        int[] temp = new int[arg.length];
-                        for (int j = 0; j < arg.length; j++)
-                            temp[j] = arg[arg.length - j - 1];
-
-                        result.shiftedRow = temp;
+                        result.shiftedRow = gameField.reverse(result.shiftedRow);
                     }
 
-                    gameField.setColumn(i, result.shiftedRow);
+                    gameField.setLine(i, result.shiftedRow);
 
                     ret = ret || result.didAnythingMove;
                 }
@@ -137,7 +142,7 @@ public class Main {
 
         }
 
-        return  ret;
+        return ret;
     }
 
     private static ShiftRowResult shiftRow(int[] oldRow) {
@@ -146,7 +151,7 @@ public class Main {
         int[] oldRowWithoutZeroes = new int[oldRow.length];
 
         int q = 0;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < oldRow.length; i++) {
             if (oldRow[i] != 0) {
                 if (q != i) {
                     ret.didAnythingMove = true;
@@ -202,8 +207,6 @@ public class Main {
                 randX, randY,
                 currentX, currentY;
 
-        gameField = new GameField();
-
         randX = new Random().nextInt(4);
         currentX = randX;
         randY = new Random().nextInt(4);
@@ -211,25 +214,27 @@ public class Main {
 
         boolean placed = false;
 
-        while (!placed)
-            if (gameField.getValue(randX, randY) == 0) {
-                gameField.setValue(randX, randY, valueSpawn);
+        while (!placed) {
+            if (gameField.getValue(currentX, currentY) == 0) {
+                gameField.setValue(currentX, currentY, valueSpawn);
                 placed = true;
             } else {
-                if ((randX + 1) < 4) {
-                    randX++;
+                if ((currentX + 1) < 4) {
+                    currentX++;
                 } else {
-                    randX = 0;
-                    if ((randY + 1) < 4) {
-                        randY++;
+                    currentX = 0;
+                    if ((currentY + 1) < 4) {
+                        currentY++;
                     } else {
-                        randY = 0;
+                        currentY = 0;
                     }
                 }
 
+                if ((currentX == randX) && (currentY == randY)) {
+                    ErrorCatcher.cellCreationFailure();
+                }
             }
-        //make some error catcher if place dont change
-
+        }
         score += valueSpawn;
     }
 

@@ -6,8 +6,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 import java.io.IOException;
 
 /**
- * Загружает и хранит все доступные в игре текстуры
+ * Download and storage texture
  */
+
 public enum LwjglSprite {
     CELL2(2), CELL4(4), CELL8(8), CELL16(16), CELL32(32), CELL64(64),
     CELL128(128), CELL256(256), CELL512(512), CELL1024(1024), CELL2048(2048), EMPTY("empty");

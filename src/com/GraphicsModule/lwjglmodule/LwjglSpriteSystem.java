@@ -10,7 +10,7 @@ package com.GraphicsModule.lwjglmodule;
 import java.util.HashMap;
 
 /**
- * Система загрузки и хранения спрайтов для LWJGL
+ * System download and storage sprite for LWJGL
  *
  * @author DoKel
  * @version 1.0
@@ -18,13 +18,13 @@ import java.util.HashMap;
 class LwjglSpriteSystem {
 
     /**
-     * Хранит в себе ссылки на все доступные в игре текстуры с ключом, равным изображённой на текстуре цифре
+     * Storage links to all available texture in game, with a key equal to display number
      */
     private HashMap<Integer, com.GraphicsModule.lwjglmodule.LwjglSprite> spriteByNumber = new HashMap<>();
 
     /**
-     * Инициализирует HashMap spriteByNumber и записывает в него ссылки
-     * на все доступные в игре текстуры с ключом, равным изображённой на текстуре цифре
+     * Initialization HashMap spriteByNumber and write link
+     * to all available texture with key equals display number
      */
     LwjglSpriteSystem() {
 
@@ -36,11 +36,10 @@ class LwjglSpriteSystem {
     }
 
     /**
-     * @param n Число, которое должна изображать текстура
-     * @return Текстура, изображающее число, переданное в параметре. Если такого нет, возвращает EMPTY.
+     * @param n Number that texture must show
+     * @return Texture display number, transferred at parameter. If this number not present, return empty
      */
     public com.GraphicsModule.lwjglmodule.LwjglSprite getSpriteByNumber(int n) {
         return spriteByNumber.getOrDefault(n, com.GraphicsModule.lwjglmodule.LwjglSprite.EMPTY);
     }
-
 }
